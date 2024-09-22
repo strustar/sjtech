@@ -19,5 +19,5 @@ pydantic==2.9.0
 pydantic_core==2.23.2
 faiss-cpu==1.8.0.post1
 gdown==5.2.0
-
+pdfplumber==0.11.4
 
