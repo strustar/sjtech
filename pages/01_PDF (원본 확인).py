@@ -15,12 +15,12 @@ st.set_page_config(page_title = "PDF 자료 분석", page_icon = "✨", layout =
 
 col = st.sidebar.columns(2)
 with col[0]:
-    keywords = st.text_input("#### :green[✨ 키워드 입력] (공백으로 구분)", "신축 이음").split()    
+    keywords = st.text_input("#### :green[✨ 키워드 입력] (공백으로 구분)", "하이 패스").split()    
 with col[1]:
     keywords_condition = st.radio('#### :green[✨조건을 선택하세요]', ['and', 'or'], horizontal=True, index=0)
 
 st.sidebar.write('---')
-search_condition = st.sidebar.radio('#### :green[✨검색할 조건을 선택하세요]', ['폴더에서 검색', '파일들을 업로드해서 검색', '구글 드라이브에서 검색'], horizontal=False, index=2)
+search_condition = st.sidebar.radio('#### :green[✨검색할 조건을 선택하세요]', ['폴더에서 검색', '파일들을 업로드해서 검색','파일에서 검색', '구글 드라이브에서 검색'], horizontal=False, index=2)
 
 if '폴더' in search_condition:
     pdf_folders = pdf_Fcn.get_folders_with_pdfs('.')
@@ -50,7 +50,7 @@ elif '업로드' in search_condition:  # 업로드 파일
             pdf_Fcn.main(uploaded_file, keywords, keywords_condition)
     else:
         st.write('#### :blue[왼쪽 사이드바에서 검색할 PDF 파일들을 끌어 놓으세요]')
-else:  # 구글 드라이브에서 검색
+elif '구글' in search_condition:  # 구글 드라이브에서 검색
     gdrive_url = st.sidebar.text_input("#### :blue[구글 드라이브 파일 URL을 입력하세요]", "https://drive.google.com/file/d/1B1cQWgBh1eQukcH58jLD2Jr50yY4RanT/view?usp=drive_link")
     
     if gdrive_url:
@@ -73,7 +73,9 @@ else:  # 구글 드라이브에서 검색
             # os.remove(output)
     else:
         st.write('#### :blue[구글 드라이브 파일 URL을 입력하세요]')
-
+else:  # 파일에서 검색
+    pdf_Fcn.main('제1권 도로계획 및 구조.pdf', keywords, keywords_condition)
+    pass
 # Metric 스타일
 st.markdown("""
     <style>
