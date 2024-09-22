@@ -60,9 +60,9 @@ with st.sidebar:
     clear_btn = st.button('대화 초기화')
     # uploaded_file = st.file_uploader(':green[파일 업로드]', type=['pdf'])
     # if uploaded_file == None:
-    uploaded_file = "https://drive.google.com/file/d/1BrWtUEHPNzupNnfyTv9sUHryBbkpXEsn/view?usp=sharing"
+    uploaded_file = "https://drive.google.com/file/d/1B1cQWgBh1eQukcH58jLD2Jr50yY4RanT/view?usp=drive_link"
     uploaded_file
-    '도로설계요령(2020) 제3권 교량.pdf'
+    '도로설계요령(2020) 제1권 도로계획 및 구조.pdf'
 
     prompt_files = glob.glob('prompts/*.yaml')
     

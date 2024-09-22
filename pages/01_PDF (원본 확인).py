@@ -51,14 +51,14 @@ elif '업로드' in search_condition:  # 업로드 파일
     else:
         st.write('#### :blue[왼쪽 사이드바에서 검색할 PDF 파일들을 끌어 놓으세요]')
 else:  # 구글 드라이브에서 검색
-    gdrive_url = st.sidebar.text_input("#### :blue[구글 드라이브 파일 URL을 입력하세요]", "https://drive.google.com/file/d/1BrWtUEHPNzupNnfyTv9sUHryBbkpXEsn/view?usp=sharing")
+    gdrive_url = st.sidebar.text_input("#### :blue[구글 드라이브 파일 URL을 입력하세요]", "https://drive.google.com/file/d/1B1cQWgBh1eQukcH58jLD2Jr50yY4RanT/view?usp=drive_link")
     
     if gdrive_url:
         if 'gdrive_file' not in st.session_state:
             with st.spinner('구글 드라이브에서 파일 다운로드 중...'):
                 file_id = gdrive_url.split('/')[-2]
                 with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
-                    output = '도로설계요령(2020) 제3권 교량.pdf' #tmp_file.name
+                    output = '도로설계요령(2020) 제1권 도로계획 및 구조.pdf' #tmp_file.name
                     gdown.download(f'https://drive.google.com/uc?id={file_id}', output, quiet=False)
                 st.session_state.gdrive_file = output
         else:
