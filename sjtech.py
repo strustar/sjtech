@@ -6,7 +6,7 @@ from langchain_teddynote.prompts import load_prompt
 from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
 import glob
-import os, time, tempfile, gdown
+import os, time
     
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyMuPDFLoader
@@ -58,11 +58,10 @@ if 'chain' not in st.session_state:
 
 with st.sidebar:    
     clear_btn = st.button('대화 초기화')
-    # uploaded_file = st.file_uploader(':green[파일 업로드]', type=['pdf'])
-    # if uploaded_file == None:
-    uploaded_file = "https://drive.google.com/file/d/1B1cQWgBh1eQukcH58jLD2Jr50yY4RanT/view?usp=drive_link"
+    uploaded_file = st.file_uploader(':green[파일 업로드]', type=['pdf'])
+    if uploaded_file == None:
+        uploaded_file = '제1권 도로계획 및 구조.pdf'
     uploaded_file
-    '도로설계요령(2020) 제1권 도로계획 및 구조.pdf'
 
     prompt_files = glob.glob('prompts/*.yaml')
     
@@ -91,30 +90,15 @@ def add_message(role, message):
 # 파일을 캐시 저장 (시간이 오래 걸리는 작업을 처리할 예정)
 @st.cache_resource(show_spinner='업로드한 파일을 처리 중입니다...')
 def embed_file(file):
-    if isinstance(file, str):  # 기본 파일 경로 또는 URL
-        if file.startswith('http'):  # Google Drive URL
-            if 'gdrive_file' not in st.session_state:
-                with st.spinner('구글 드라이브에서 파일 다운로드 중...'):
-                    file_id = file.split('/')[-2]
-                    output = f'.cache/files/gdrive_{file_id}.pdf'
-                    gdown.download(f'https://drive.google.com/uc?id={file_id}', output, quiet=False)
-                st.session_state.gdrive_file = output
-            output = st.session_state.gdrive_file
-        else:
-            output = file  # 로컬 파일 경로
+    if isinstance(file, str):  # 기본 파일 경로
+        file_path = file
     else:  # 업로드된 파일
         file_content = file.read()
-        output = f'.cache/files/{file.name}'
-        with open(output, 'wb') as f:
+        file_path = f'./.cache/files/{file.name}'
+        with open(file_path, 'wb') as f:
             f.write(file_content)
 
-    try:
-        return create_retriever(output, search_k)
-    except Exception as e:
-        st.error(f"파일 처리 중 오류가 발생했습니다: {str(e)}")
-        return None
-
-    return create_retriever(output, search_k)
+    return create_retriever(file_path, search_k)
 
 
 # 체인 생성
